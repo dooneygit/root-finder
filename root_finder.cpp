@@ -1,6 +1,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <cmath>
+#include <cassert>
 
 // Function declarations
 int main();
@@ -79,12 +80,46 @@ int main() {
 // You must implement the 'roots(...)' function with
 // the parameters and return value as specified here.
 unsigned int roots( double coeffs[], unsigned int degree ) {
+  for(int i{0}; i < 100; i++) {
+    double root = newton(coeffs, degree);
+
+    if(std::isnan(root)) {
+
+    }
+    else {
+
+    }
+  }
+
   return degree;
 }
 
 // You must implement Newton's method on polynomials.
 // You are welcome to change the signature.
 double newton( double coeffs[], unsigned int degree ) {
+  if(degree == 0) return NAN;
+  assert(coeffs[degree] != 0.0);
+
+  double x0 = 211.59169;
+  double eps = 1e-8;
+
+  for(unsigned int k{0}; k < 100; k++) {
+    double fx = horner(x0, coeffs, degree);
+    double dfx = dhorner(x0, coeffs, degree);
+
+    double x1 = x0 - fx/dfx;
+
+    if(!std::isfinite(x1)) {
+      return NAN;
+    }
+
+    if((std::abs(x1 - x0) < eps) && (std::abs(horner(x1, coeffs, degree)) < eps)) {
+      return x1;
+    }
+
+    x0 = x1;
+  }
+
   return NAN;
 }
 
