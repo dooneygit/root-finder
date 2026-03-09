@@ -87,7 +87,7 @@ unsigned int roots( double coeffs[], unsigned int degree ) {
   unsigned int n = degree;
   
   while(n > 0) {
-    double root = newton(coeffs, degree);
+    double root = newton(coeffs, n);
 
     if(std::isnan(root)) {
       break;
