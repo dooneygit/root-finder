@@ -2,6 +2,7 @@
 #include <stdexcept>
 #include <cmath>
 #include <cassert>
+#include <algorithm>
 
 // Function declarations
 int main();
@@ -82,11 +83,9 @@ int main() {
 unsigned int roots( double coeffs[], unsigned int degree ) {
   if(degree == 0) return 0;
   assert(coeffs[degree] != 0.0);
-
-  unsigned int n = degree;
   
   for(int n{degree}; n > 0; n--) {
-    double root = newton(coeffs, degree);
+    double root = newton(coeffs, n);
 
     if(std::isnan(root)) {
       break;
