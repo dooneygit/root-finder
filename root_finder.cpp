@@ -83,9 +83,11 @@ int main() {
 unsigned int roots( double coeffs[], unsigned int degree ) {
   if(degree == 0) return 0;
   assert(coeffs[degree] != 0.0);
+
+  unsigned int n = degree;
   
-  for(int n{degree}; n > 0; n--) {
-    double root = newton(coeffs, n);
+  while(n > 0) {
+    double root = newton(coeffs, degree);
 
     if(std::isnan(root)) {
       break;
@@ -93,6 +95,7 @@ unsigned int roots( double coeffs[], unsigned int degree ) {
     else {
       divide(root, coeffs, n);
       coeffs[n] = root;
+      n--;
     }
   }
   std::sort(&coeffs[n+1], &coeffs[degree + 1]);
