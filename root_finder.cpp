@@ -81,24 +81,24 @@ int main() {
 // You must implement the 'roots(...)' function with
 // the parameters and return value as specified here.
 unsigned int roots( double coeffs[], unsigned int degree ) {
-  if(degree == 0) return 0;
-  assert(coeffs[degree] != 0.0);
+  if(degree == 0) return 0; //if polynomial is a constant, there are no roots to find
+  assert(coeffs[degree] != 0.0); //polynomial must have a non-zero coefficient
 
   unsigned int n = degree;
   
-  while(n > 0) {
-    double root = newton(coeffs, n);
+  while(n > 0) { //find one root at a time
+    double root = newton(coeffs, n); //use Newton's method to find a real root of the current polynomial 
 
-    if(std::isnan(root)) {
+    if(std::isnan(root)) { //if Newton's method fails, break
       break;
     }
     else {
-      divide(root, coeffs, n);
-      coeffs[n] = root;
-      n--;
+      divide(root, coeffs, n); //divide polynomial by x - r
+      coeffs[n] = root; //store root at the end of the array
+      n--; //decrement degree
     }
   }
-  std::sort(&coeffs[n+1], &coeffs[degree + 1]);
+  std::sort(&coeffs[n+1], &coeffs[degree + 1]); //sort all roots
 
   return n;
 }
@@ -106,30 +106,30 @@ unsigned int roots( double coeffs[], unsigned int degree ) {
 // You must implement Newton's method on polynomials.
 // You are welcome to change the signature.
 double newton( double coeffs[], unsigned int degree ) {
-  if(degree == 0) return NAN;
-  assert(coeffs[degree] != 0.0);
+  if(degree == 0) return NAN; //if polynomial is a constant, there are no roots to find
+  assert(coeffs[degree] != 0.0); //polynomial must have a non-zero coefficient
 
-  double x0 = 211.59169;
-  double eps = 1e-8;
+  double x0 = 211.59169; //initial guess for Newton's method
+  double eps = 1e-8; //tolerance
 
-  for(unsigned int k{0}; k < 100; k++) {
-    double fx = horner(x0, coeffs, degree);
-    double dfx = dhorner(x0, coeffs, degree);
+  for(unsigned int k{0}; k < 100; k++) { //iterate up to 100 times
+    double fx = horner(x0, coeffs, degree); //f(x0)
+    double dfx = dhorner(x0, coeffs, degree); //f'(x0)
 
-    double x1 = x0 - fx/dfx;
+    double x1 = x0 - fx/dfx; //Newton step
 
-    if(!std::isfinite(x1)) {
+    if(!std::isfinite(x1)) { //if computation blows up, return NAN
       return NAN;
     }
 
-    if((std::abs(x1 - x0) < eps) && (std::abs(horner(x1, coeffs, degree)) < eps)) {
+    if((std::abs(x1 - x0) < eps) && (std::abs(horner(x1, coeffs, degree)) < eps)) { //stop when our guess barely changes and when the value is very close to 0
       return x1;
     }
 
-    x0 = x1;
+    x0 = x1; //keep guessing
   }
 
-  return NAN;
+  return NAN; //no convergence, return NAN
 }
 
 // The polynomial division algorithm is implemented for you. 
@@ -159,10 +159,10 @@ double horner( double x, double coeffs[], unsigned int degree ) {
 
 // You need to implement this
 double dhorner( double x, double coeffs[], unsigned int degree ) {
-  double result{degree * coeffs[degree]};
+  double result{degree * coeffs[degree]}; //f' highest degree term
 
-  for(unsigned int k{degree}; k > 1;) {
-    k--;
+  for(unsigned int k{degree}; k > 1;) { //apply horner's rule to coefficients of f'
+    k--; 
     result = result * x + k * coeffs[k];
   }
 
