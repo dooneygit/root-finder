@@ -80,18 +80,25 @@ int main() {
 // You must implement the 'roots(...)' function with
 // the parameters and return value as specified here.
 unsigned int roots( double coeffs[], unsigned int degree ) {
-  for(int i{0}; i < 100; i++) {
+  if(degree == 0) return 0;
+  assert(coeffs[degree] != 0.0);
+
+  unsigned int n = degree;
+  
+  for(int n{degree}; n > 0; n--) {
     double root = newton(coeffs, degree);
 
     if(std::isnan(root)) {
-
+      break;
     }
     else {
-
+      divide(root, coeffs, n);
+      coeffs[n] = root;
     }
   }
+  std::sort(&coeffs[n+1], &coeffs[degree + 1]);
 
-  return degree;
+  return n;
 }
 
 // You must implement Newton's method on polynomials.
